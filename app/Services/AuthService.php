@@ -1,15 +1,20 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Services;
 
 use App\Http\Requests\LoginAuthRequest;
 use App\Http\Requests\RegisterAuthRequest;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use App\Repositories\UserRepositoryInterface;
 
-class AuthService
+class AuthService implements AuthServiceInterface
 {
+    private $userRepository;
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
     /**
      * Register a new user.
      *
@@ -18,11 +23,7 @@ class AuthService
      */
     public function register(RegisterAuthRequest $request): string
     {
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $user = $this->userRepository->create($request->all());
 
         return $user->createToken('auth_token')->accessToken;
     }
@@ -35,11 +36,7 @@ class AuthService
      */
     public function login(LoginAuthRequest $request): string
     {
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
+        $user = $this->userRepository->find($request->email);
 
         return $user->createToken('auth_token')->accessToken;
     }
