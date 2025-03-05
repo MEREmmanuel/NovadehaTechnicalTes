@@ -21,7 +21,6 @@ Make sure you have the following installed:
 
    ```sh
    composer install
-   npm install
    ```
 
 3. **Copy the environment file and configure it**
