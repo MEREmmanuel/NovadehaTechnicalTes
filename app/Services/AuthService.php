@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Exceptions\ResourceNotFoundException;
 use App\Http\Requests\LoginAuthRequest;
 use App\Http\Requests\RegisterAuthRequest;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ class AuthService implements AuthServiceInterface
     {
         $this->userRepository = $userRepository;
     }
+    
     /**
      * Register a new user.
      *
@@ -37,6 +39,10 @@ class AuthService implements AuthServiceInterface
     public function login(LoginAuthRequest $request): string
     {
         $user = $this->userRepository->find($request->email);
+
+        if (!$user) {
+            throw new ResourceNotFoundException('User not found');
+        }
 
         return $user->createToken('auth_token')->accessToken;
     }

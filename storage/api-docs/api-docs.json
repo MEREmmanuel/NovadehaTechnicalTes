@@ -1,0 +1,1219 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Mi API",
+        "description": "Documentación de mi API con Swagger",
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Registrar un usuario",
+                "description": "Registra un usuario y devuelve un token de autenticación.",
+                "operationId": "8a56853624e025573120a09a4c75d468",
+                "requestBody": {
+                    "description": "Datos necesarios para el registro",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Juan Pérez"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "juan@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "123456"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuario registrado correctamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error en la solicitud",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "El email ya está en uso."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Errores de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "El campo email es obligatorio."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Iniciar sesión",
+                "description": "Autentica al usuario y devuelve un token de acceso.",
+                "operationId": "a3b306d14572d1f4bd6c064b3233e7b8",
+                "requestBody": {
+                    "description": "Credenciales de inicio de sesión",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "usuario@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Inicio de sesión exitoso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUz..."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciales incorrectas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Credenciales inválidas"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Cerrar sesión",
+                "description": "Cierra la sesión del usuario y revoca el token.",
+                "operationId": "fe8f3429cd6979b3b4517e186505f9f9",
+                "responses": {
+                    "200": {
+                        "description": "Sesión cerrada correctamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successfully logged out"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Token inválido o expirado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/companies": {
+            "get": {
+                "tags": [
+                    "Companies"
+                ],
+                "summary": "Get all companies",
+                "description": "Returns all companies",
+                "operationId": "54f966c056050f9db4fff6ee5a45a76a",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Empresa XYZ"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Companies not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No companies found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Companies"
+                ],
+                "summary": "Create a company",
+                "description": "Create a new company with the provided data.",
+                "operationId": "00e2db7b0f71c32b377f4dfc4dd685a8",
+                "requestBody": {
+                    "description": "Company data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "address",
+                                    "city",
+                                    "state",
+                                    "zipcode",
+                                    "country",
+                                    "email",
+                                    "phone"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Empresa XYZ"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "123 Calle Principal"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "Ciudad Ejemplo"
+                                    },
+                                    "state": {
+                                        "type": "string",
+                                        "example": "Estado Ejemplo"
+                                    },
+                                    "zipcode": {
+                                        "type": "string",
+                                        "example": "12345"
+                                    },
+                                    "country": {
+                                        "type": "string",
+                                        "example": "México"
+                                    },
+                                    "website": {
+                                        "type": "string",
+                                        "example": "https://www.empresa.com",
+                                        "nullable": true
+                                    },
+                                    "note": {
+                                        "type": "string",
+                                        "example": "Nota de la empresa",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "contacto@empresa.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+52 123 456 7890"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Company created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Empresa XYZ"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "contacto@empresa.com"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The name field is required."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/companies/{id}": {
+            "get": {
+                "tags": [
+                    "Companies"
+                ],
+                "summary": "Get company by id",
+                "description": "Returns a company by id",
+                "operationId": "01c261c039e4b27beeb888ef46bd86db",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Company id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Empresa XYZ"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Company not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Company not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Companies"
+                ],
+                "summary": "Update a company",
+                "description": "Update an existing company with the provided data.",
+                "operationId": "6a1d7a4a2b9cbdfe7749cef78e6cec57",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Company ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Company data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "address",
+                                    "city",
+                                    "state",
+                                    "zipcode",
+                                    "country",
+                                    "email",
+                                    "phone"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Empresa XYZ"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "123 Calle Principal"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "Ciudad Ejemplo"
+                                    },
+                                    "state": {
+                                        "type": "string",
+                                        "example": "Estado Ejemplo"
+                                    },
+                                    "zipcode": {
+                                        "type": "string",
+                                        "example": "12345"
+                                    },
+                                    "country": {
+                                        "type": "string",
+                                        "example": "México"
+                                    },
+                                    "website": {
+                                        "type": "string",
+                                        "example": "https://www.empresa.com",
+                                        "nullable": true
+                                    },
+                                    "note": {
+                                        "type": "string",
+                                        "example": "Nota de la empresa",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "contacto@empresa.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+52 123 456 7890"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Company updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Empresa XYZ"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "contacto@empresa.com"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Company not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Company not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The email field must be a valid email address."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Companies"
+                ],
+                "summary": "Delete a company",
+                "description": "Delete a company",
+                "operationId": "49d767f608bffc95ad39368bf1766693",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Company id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Company deleted successfully"
+                    },
+                    "404": {
+                        "description": "Company not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Company not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/contacts/{company_id}/contacts": {
+            "get": {
+                "tags": [
+                    "Contacts"
+                ],
+                "summary": "Get all contacts from a company",
+                "description": "Returns a list of contacts associated with a company.",
+                "operationId": "fb13822374ebfde2ba1b321780dbeffb",
+                "parameters": [
+                    {
+                        "name": "company_id",
+                        "in": "path",
+                        "description": "Company ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Empresa XYZ"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No contacts found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No contacts found."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/contacts": {
+            "post": {
+                "tags": [
+                    "Contacts"
+                ],
+                "summary": "Crear un nuevo contacto",
+                "description": "Registra un nuevo contacto en el sistema",
+                "operationId": "a3b0baf957a16c1ed505f2e8985c254c",
+                "requestBody": {
+                    "description": "Datos del nuevo contacto",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "company_id",
+                                    "first_name",
+                                    "last_name",
+                                    "position",
+                                    "email",
+                                    "phone"
+                                ],
+                                "properties": {
+                                    "company_id": {
+                                        "description": "ID de la empresa",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "first_name": {
+                                        "description": "Nombre del contacto",
+                                        "type": "string",
+                                        "example": "John"
+                                    },
+                                    "last_name": {
+                                        "description": "Apellido del contacto",
+                                        "type": "string",
+                                        "example": "Doe"
+                                    },
+                                    "position": {
+                                        "description": "Posición del contacto en la empresa",
+                                        "type": "string",
+                                        "example": "CEO"
+                                    },
+                                    "email": {
+                                        "description": "Correo electrónico del contacto",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "phone": {
+                                        "description": "Número de teléfono del contacto",
+                                        "type": "string",
+                                        "example": "+123456789"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Contacto creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "first_name": {
+                                            "type": "string",
+                                            "example": "Empresa XYZ"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "contacto@empresa.com"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/contacts/{id}": {
+            "get": {
+                "tags": [
+                    "Contacts"
+                ],
+                "summary": "Get a contact by id",
+                "description": "Returns a contact by its id.",
+                "operationId": "4b37f4c90f5cd7974a09bd688ac4d3dd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Contact ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Empresa XYZ"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Contact not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Company not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Contacts"
+                ],
+                "summary": "Update a contact",
+                "description": "Update a contact in the system",
+                "operationId": "554514967b71c75698b6cef012de4420",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Contact ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Contact data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "company_id",
+                                    "first_name",
+                                    "last_name",
+                                    "position",
+                                    "email",
+                                    "phone"
+                                ],
+                                "properties": {
+                                    "company_id": {
+                                        "description": "ID de la empresa",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "first_name": {
+                                        "description": "Nombre del contacto",
+                                        "type": "string",
+                                        "example": "John"
+                                    },
+                                    "last_name": {
+                                        "description": "Apellido del contacto",
+                                        "type": "string",
+                                        "example": "Doe"
+                                    },
+                                    "position": {
+                                        "description": "Posición del contacto en la empresa",
+                                        "type": "string",
+                                        "example": "CEO"
+                                    },
+                                    "email": {
+                                        "description": "Correo electrónico del contacto",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "phone": {
+                                        "description": "Número de teléfono del contacto",
+                                        "type": "string",
+                                        "example": "+123456789"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Contact updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "first_name": {
+                                                    "type": "string",
+                                                    "example": "Empresa XYZ"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "contacto@empresa.com"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Contact not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Contact not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The email field must be a valid email address."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Contacts"
+                ],
+                "summary": "Delete a contact",
+                "description": "Delete a contact from the system",
+                "operationId": "3a78f2af1871a21a2b5a492134d72017",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Contact ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Contact deleted successfully"
+                    },
+                    "404": {
+                        "description": "Company not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Contact not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Autenticación",
+            "description": "Autenticación"
+        },
+        {
+            "name": "Companies",
+            "description": "Companies"
+        },
+        {
+            "name": "Contacts",
+            "description": "Contacts"
+        }
+    ]
+}

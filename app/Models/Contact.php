@@ -11,6 +11,15 @@ class Contact extends Model
     /** @use HasFactory<\Database\Factories\ContactFactory> */
     use SoftDeletes, HasFactory;
 
+    protected $fillable = [
+        'company_id',
+        'first_name',
+        'last_name',
+        'position',
+        'email',
+        'phone'
+    ];
+
     public function company()
     {
         return $this->belongsTo(Company::class);

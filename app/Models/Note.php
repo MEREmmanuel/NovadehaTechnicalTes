@@ -11,7 +11,7 @@ class Note extends Model
     /** @use HasFactory<\Database\Factories\NoteFactory> */
     use SoftDeletes, HasFactory;
 
-    protected $fillable = ['content'];
+    protected $guarded = [];
 
     public function noteable()
     {
@@ -23,8 +23,8 @@ class Note extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function contact()
-    {
-        return $this->belongsTo(Contact::class);
-    }
+    // public function contact()
+    // {
+    //     return $this->belongsTo(Contact::class);
+    // }
 }

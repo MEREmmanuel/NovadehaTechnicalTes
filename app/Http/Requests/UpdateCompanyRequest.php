@@ -11,7 +11,7 @@ class UpdateCompanyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,15 @@ class UpdateCompanyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:255'],
+            'state' => ['required', 'string', 'max:255'],
+            'zipcode' => ['required', 'string', 'max:10'],
+            'country' => ['required', 'string', 'max:255'],
+            'website' => ['nullable', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:companies'],
+            'phone' => ['required', 'string', 'max:255'],
         ];
     }
 }

@@ -20,6 +20,30 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\UserRepositoryInterface::class,
             \App\Repositories\UserRepository::class
         );
+        $this->app->bind(
+            \App\Services\CompanyServiceInterface::class,
+            \App\Services\CompanyService::class
+        );
+        $this->app->bind(
+            \App\Repositories\CompanyRepositoryInterface::class,
+            \App\Repositories\CompanyRepository::class
+        );
+        $this->app->bind(
+            \App\Services\NoteServiceInterface::class,
+            \App\Services\NoteService::class
+        );
+        $this->app->bind(
+            \App\Repositories\NoteRepositoryInterface::class,
+            \App\Repositories\NoteRepository::class
+        );
+        $this->app->bind(
+            \App\Services\ContactServiceInterface::class,
+            \App\Services\ContactService::class
+        );
+        $this->app->bind(
+            \App\Repositories\ContactRepositoryInterface::class,
+            \App\Repositories\ContactRepository::class
+        );
     }
 
     /**

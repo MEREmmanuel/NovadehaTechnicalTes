@@ -10,11 +10,24 @@ class Company extends Model
 {
     /** @use HasFactory<\Database\Factories\CompanyFactory> */
     use SoftDeletes, HasFactory;
-    
+
+    protected $fillable = [
+        'name',
+        'address',
+        'city',
+        'state',
+        'zipcode',
+        'country',
+        'website',
+        'email',
+        'phone'
+    ];
+
     public function contacts()
     {
         return $this->hasMany(Contact::class);
     }
+
     public function note()
     {
         return $this->morphOne(Note::class, 'noteable');
