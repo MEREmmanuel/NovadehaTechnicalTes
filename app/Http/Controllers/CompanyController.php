@@ -274,6 +274,6 @@ class CompanyController extends Controller
     {
         $this->companyService->delete($id);
 
-        return response()->json(["status" => "success", "data" => null], 204);
+        return response()->json(["status" => "success", "data" => "Company deleted successfully"], 204);
     }
 }

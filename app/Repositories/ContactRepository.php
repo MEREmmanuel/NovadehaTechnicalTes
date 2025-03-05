@@ -8,12 +8,12 @@ class ContactRepository implements ContactRepositoryInterface
 {
     public function all(int $company_id)
     {
-        return Contact::where('company_id', $company_id)->get();
+        return Contact::where('company_id', $company_id)->with('note')->get();
     }
     
     public function find(int $id)
     {
-        return Contact::find($id);
+        return Contact::with('note')->find($id);
     }
 
     public function create(array $data)

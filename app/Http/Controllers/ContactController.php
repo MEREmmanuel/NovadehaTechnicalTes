@@ -4,23 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
-use App\Services\ContactService;
-use App\Services\CompanyService;
+use App\Services\CompanyServiceInterface;
+use App\Services\ContactServiceInterface;
+use App\Services\NoteServiceInterface;
 
 class ContactController extends Controller
 {
     protected $contactService;
     protected $companyService;
+    protected $noteService;
 
-    public function __construct(ContactService $contactService, CompanyService $companyService)
+    public function __construct(ContactServiceInterface $contactService, CompanyServiceInterface $companyService, NoteServiceInterface $noteService)
     {
         $this->contactService = $contactService;
         $this->companyService = $companyService;
+        $this->noteService = $noteService;
     }
 
     /**
      * @OA\Get(
-     *     path="/api/contacts/{company_id}/contacts",
+     *     path="/api/companies/{company_id}/contacts",
      *     tags={"Contacts"},
      *     security={{"bearerAuth":{}}},
      *     summary="Get all contacts from a company",
@@ -63,26 +66,27 @@ class ContactController extends Controller
     /**
      * @OA\Post(
      *     path="/api/contacts",
-     *     summary="Crear un nuevo contacto",
+     *     summary="Create a new contact",
      *     tags={"Contacts"},
      *     security={{"bearerAuth":{}}},
-     *     description="Registra un nuevo contacto en el sistema",
+     *     description="Create a new contact in the system",
      *     @OA\RequestBody(
      *         required=true,
-     *         description="Datos del nuevo contacto",
+     *         description="Contact data",
      *         @OA\JsonContent(
      *             required={"company_id", "first_name", "last_name", "position", "email", "phone"},
-     *             @OA\Property(property="company_id", type="integer", example=1, description="ID de la empresa"),
-     *             @OA\Property(property="first_name", type="string", example="John", description="Nombre del contacto"),
-     *             @OA\Property(property="last_name", type="string", example="Doe", description="Apellido del contacto"),
-     *             @OA\Property(property="position", type="string", example="CEO", description="Posición del contacto en la empresa"),
-     *             @OA\Property(property="email", type="string", format="email", example="john.doe@example.com", description="Correo electrónico del contacto"),
-     *             @OA\Property(property="phone", type="string", example="+123456789", description="Número de teléfono del contacto")
+     *             @OA\Property(property="company_id", type="integer", example=1, description="Company ID"),
+     *             @OA\Property(property="first_name", type="string", example="John", description="Contact's first name"),
+     *             @OA\Property(property="last_name", type="string", example="Doe", description="Contact's last name"),
+     *             @OA\Property(property="position", type="string", example="CEO", description="Contact's position in the company"),
+     *             @OA\Property(property="email", type="string", format="email", example="john.doe@example.com", description="Contact's email"),
+     *             @OA\Property(property="phone", type="string", example="+123456789", description="Contact's phone number"),
+     *             @OA\Property(property="note", type="string", example="Additional Note", description="Additional note")
      *         )
      *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="Contacto creado exitosamente",
+     *         description="Contact created successfully",
      *         @OA\JsonContent(
      *             @OA\Property(property="id", type="integer", example=1),
      *             @OA\Property(property="first_name", type="string", example="Empresa XYZ"),
@@ -91,7 +95,7 @@ class ContactController extends Controller
      *     ),
      *     @OA\Response(
      *         response=422,
-     *         description="Error de validación",
+     *         description="Validation error",
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string", example="The given data was invalid.")
      *         )
@@ -102,6 +106,9 @@ class ContactController extends Controller
     public function store(StoreContactRequest $request)
     {
         $contact = $this->contactService->create($request);
+
+        if ($request->note) $this->noteService->create($request->note, $contact->id, 'App\Models\Contact');
+
         return response()->json(["status" => "success", "data" => $contact], 201);
     }
 
@@ -254,6 +261,6 @@ class ContactController extends Controller
     public function destroy($id)
     {
         $this->contactService->delete($id);
-        return response()->json(["status" => "success", "data" => null], 204);
+        return response()->json(["status" => "success", "data" => "Contact deleted successfully"], 204);
     }
 }

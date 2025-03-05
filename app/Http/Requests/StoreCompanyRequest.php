@@ -31,6 +31,7 @@ class StoreCompanyRequest extends FormRequest
             'website' => ['nullable', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:companies'],
             'phone' => ['required', 'string', 'max:255'],
+            'note' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

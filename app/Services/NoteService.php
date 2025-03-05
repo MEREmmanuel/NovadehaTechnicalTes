@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\NoteRepositoryInterface;
+use App\Http\Exceptions\ResourceNotFoundException;
 
 class NoteService implements NoteServiceInterface
 {
@@ -15,6 +16,12 @@ class NoteService implements NoteServiceInterface
 
     public function find(int $id)
     {
+        $note = $this->noteRepository->find($id);
+
+        if (!$note) {
+            throw new ResourceNotFoundException('Note not found');
+        }
+
         return $this->noteRepository->find($id);
     }
 
@@ -36,6 +43,12 @@ class NoteService implements NoteServiceInterface
 
     public function delete(int $id)
     {
+        $note = $this->noteRepository->find($id);
+
+        if (!$note) {
+            throw new ResourceNotFoundException('Note not found');
+        }
+        
         return $this->noteRepository->delete($id);
     }
 }

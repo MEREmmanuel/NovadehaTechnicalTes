@@ -11,7 +11,7 @@ class StoreNoteRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class StoreNoteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'note' => ['required', 'string', 'max:255'],
+            'notable_id' => ['required', 'integer', 'unique:notes'],
+            'notable_type' => ['required', 'string', 'max:255']
         ];
     }
 }

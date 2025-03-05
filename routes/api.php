@@ -23,7 +23,14 @@ Route::middleware('auth:api')->group(function () {
 });
 
 Route::middleware('auth:api')->group(function () {
-    Route::get('/contacts/{company_id}/contacts', [ContactController::class, 'index']);
+    Route::post('/notes', [NoteController::class, 'store']);
+    Route::get('/notes/{id}', [NoteController::class, 'show']);
+    Route::put('/notes/{id}', [NoteController::class, 'update']);
+    Route::delete('/notes/{id}', [NoteController::class, 'destroy']);
+});
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/companies/{company_id}/contacts', [ContactController::class, 'index']);
     Route::post('/contacts', [ContactController::class, 'store']);
     Route::get('/contacts/{id}', [ContactController::class, 'show']);
     Route::put('/contacts/{id}', [ContactController::class, 'update']);
