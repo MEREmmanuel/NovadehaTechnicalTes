@@ -48,6 +48,10 @@ Make sure you have the following installed:
    php artisan passport:client --personal
    ```
 
+   ```sh
+   php artisan key:generate
+   ```
+   
 6. **Run the development server**
 
    ```sh
