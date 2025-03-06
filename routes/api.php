@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\StatusController;
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -35,6 +36,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/contacts/{id}', [ContactController::class, 'show']);
     Route::put('/contacts/{id}', [ContactController::class, 'update']);
     Route::delete('/contacts/{id}', [ContactController::class, 'destroy']);
+});
+
+Route::middleware('auth:api')->group(function () {
+    Route::post('/statusses', [StatusController::class, 'create']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);

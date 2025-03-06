@@ -29,6 +29,10 @@ class CompanyService implements CompanyServiceInterface
             throw new ResourceNotFoundException('Company not found');
         }
 
+        $company->load([
+            'status:*'
+        ]);
+
         return $company;
     }
 

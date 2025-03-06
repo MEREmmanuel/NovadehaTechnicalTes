@@ -20,7 +20,8 @@ class Company extends Model
         'country',
         'website',
         'email',
-        'phone'
+        'phone',
+        'status_id'
     ];
 
     public function contacts()
@@ -31,5 +32,10 @@ class Company extends Model
     public function note()
     {
         return $this->morphOne(Note::class, 'noteable');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class);
     }
 }
